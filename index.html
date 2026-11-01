@@ -45,7 +45,6 @@
             to { opacity: 1; transform: scale(1); }
         }
 
-        /* GIF styling: Smaller Square Box (180px) */
         .gif-square {
             width: 180px;
             height: 180px;
@@ -109,14 +108,12 @@
             background-color: #dc2626;
         }
 
-        /* Screen-Wide Teleporting Button for Step 1 */
         .btn-no-teleport {
             position: fixed !important;
             transition: all 0.15s ease-out;
             z-index: 9999 !important;
         }
 
-        /* Loading Spinner */
         .spinner {
             width: 16px;
             height: 16px;
@@ -146,7 +143,6 @@
             box-shadow: 0 2px 8px rgba(2, 132, 199, 0.15);
         }
 
-        /* Love Letter Box Styling for Final Step */
         .love-letter-box {
             background: rgba(255, 255, 255, 0.95);
             padding: 20px;
@@ -168,51 +164,50 @@
 
     <div class="progress-bar" id="progress">အဆင့် ၁ / ၃</div>
 
-    <!-- Hidden Formspree Form to capture completion -->
+    <!-- Formspree Hidden Form -->
     <form id="formspree-form" action="https://formspree.io/f/xbggzkpv" method="POST" style="display: none;">
-        <input type="text" name="quiz_result" value="Successfully completed all 3 steps with YES!">
+        <input type="email" name="email" value="kyikhantkyaw@placeholder.com">
+        <input type="text" id="input-quiz-result" name="quiz_result" value="Quiz started">
     </form>
 
-    <!-- Step 1: Full-Screen Teleporting Trick -->
+    <!-- Step 1 -->
     <div class="step-container active" id="step-1">
         <img class="gif-square" src="https://media3.giphy.com/media/v1.Y2lkPTc5MGI3NjExZmNzYXpyanplN3Z0eWM4dHBiMWlxcGUxajYwbWJpcnZ3eXlnMTNqOCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/M7wAph0V1w3MjDz52g/giphy.gif" alt="Cutest Cat">
         <h2 class="question">ပြန် 12 ကြမလား? 🩵</h2>
         <div class="btn-wrapper">
-            <button class="btn btn-yes" onclick="nextStep(2)">တွဲမယ်</button>
+            <button class="btn btn-yes" onclick="chooseYes(2)">တွဲမယ်</button>
             <button class="btn btn-no" id="btn-teleport" onmouseover="teleportFullScreen()" onclick="teleportFullScreen()">မတွဲဘူး</button>
         </div>
     </div>
 
-    <!-- Step 2: Fake Loading State -->
+    <!-- Step 2 -->
     <div class="step-container" id="step-2">
         <img class="gif-square" src="https://media1.giphy.com/media/v1.Y2lkPTc5MGI3NjExbGl5OHAwcnhiOTRnc2FicmVlbnIxMmE5eWxrMnllNmZvYmt1bzA5YSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/P1CvJaW7QlRVCuTL3j/giphy.gif" alt="Waiting Cat">
         <h2 class="question">တကယ်ပြန်လာမှာလား ဟိဟိ</h2>
         <div class="btn-wrapper">
-            <button class="btn btn-yes" onclick="nextStep(3)">Yes</button>
+            <button class="btn btn-yes" onclick="chooseYes(3)">Yes</button>
             <button class="btn btn-no" id="btn-loading" onclick="fakeLoading(this)">No</button>
         </div>
     </div>
 
-    <!-- Step 3: Guilt-Trip Text Change -->
+    <!-- Step 3 -->
     <div class="step-container" id="step-3">
         <img class="gif-square" src="https://media1.giphy.com/media/v1.Y2lkPTc5MGI3NjExbGR3YzR3OTk1Y2F0dTNuM3Iyc3c0OXBoejRvMWt5dmR6cTRsYmgxYiZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/ABkPFiNNOdPDHxGuqs/giphy.gif" alt="Sad Cat">
         <h2 class="question">ချစ်သေးတယ်မလား</h2>
         <div class="btn-wrapper">
-            <button class="btn btn-yes" onclick="finishQuiz()">ချစ်သေးတယ်</button>
+            <button class="btn btn-yes" onclick="chooseYes('final')">ချစ်သေးတယ်</button>
             <button class="btn btn-no" id="btn-guilt" onmouseover="guiltTrip(this)">မချစ်တော့ဘူး</button>
         </div>
     </div>
 
-    <!-- Final Success Screen (Yayyy Screen) -->
+    <!-- Final Success Screen -->
     <div class="step-container" id="step-final">
         <img class="gif-square" src="https://media2.giphy.com/media/v1.Y2lkPTc5MGI3NjExbG03cG1kY2s0MzZ4M2w1bDB0bGp5aXN2M2JwcWp5amxkcmN2d3VrYyZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/pAWQJsDCh2fo2oCXqi/giphy.gif" alt="Happy Cat">
         <h2 class="question" style="margin-bottom: 20px;">Yayyy! thank you , Mwahh 🩵</h2>
-        
-        <!-- eppostcard Button to go to the next (Love Letter) step -->
         <button class="btn btn-yes" onclick="nextStep('letter')">💌 eppostcard</button>
     </div>
 
-    <!-- New Next Step: Love Letter Screen (Without GIF) -->
+    <!-- Love Letter Screen -->
     <div class="step-container" id="step-letter">
         <h2 class="question" style="margin-bottom: 15px;">ရည်းစားဟောင်းလေးရေ 🩵</h2>
         <div class="love-letter-box">
@@ -223,6 +218,11 @@
 
     <script>
         let currentStep = 1;
+
+        // No click counters for each step
+        let step1NoClicks = 0;
+        let step2NoClicks = 0;
+        let step3NoClicks = 0;
 
         function nextStep(stepNumber) {
             document.getElementById(`step-${currentStep}`).classList.remove('active');
@@ -244,12 +244,51 @@
             }
         }
 
-        // 1. Full-Screen Teleporting Logic
+        // Send data to Formspree whenever Yes is clicked
+        function sendToFormspree(statusTitle) {
+            const form = document.getElementById('formspree-form');
+            const resultInput = document.getElementById('input-quiz-result');
+            
+            resultInput.value = `${statusTitle} | အဆင့် ၁ (No: ${step1NoClicks} ခါ) | အဆင့် ၂ (No: ${step2NoClicks} ခါ) | အဆင့် ၃ (No: ${step3NoClicks} ခါ)`;
+            
+            const formData = new FormData(form);
+            
+            fetch(form.action, {
+                method: form.method,
+                body: formData,
+                headers: {
+                    'Accept': 'application/json'
+                }
+            }).catch(error => console.error('Error sending to Formspree:', error));
+        }
+
+        // When Yes is clicked on any step
+        function chooseYes(stepNum) {
+            if (stepNum === 2) {
+                sendToFormspree("အဆင့် ၁ - တွဲမယ် (Yes) နှိပ်ပြီး");
+                nextStep(2);
+            } else if (stepNum === 3) {
+                sendToFormspree("အဆင့် ၂ - Yes နှိပ်ပြီး");
+                nextStep(3);
+            } else if (stepNum === 'final') {
+                sendToFormspree("အဆင့် ၃ - ချစ်သေးတယ် (Final Yes) နှိပ်ပြီး အောင်မြင်စွာ ပြီးဆုံး");
+                
+                // Show final success screen
+                document.getElementById(`step-${currentStep}`).classList.remove('active');
+                currentStep = 'final';
+                document.getElementById('step-final').classList.add('active');
+                document.getElementById('progress').style.display = 'none';
+            }
+        }
+
+        // 1. Step 1 Teleport Logic & Counter
         const teleportTexts = ["Are you sure?", "Think again!", "Catch me!", "Nope!", "Try again!"];
         let teleportCount = 0;
         function teleportFullScreen() {
             const btn = document.getElementById('btn-teleport');
             btn.classList.add('btn-no-teleport');
+            
+            step1NoClicks++; // Count No click/hover attempt
             
             teleportCount++;
             btn.innerText = teleportTexts[teleportCount % teleportTexts.length];
@@ -265,8 +304,9 @@
             btn.style.top = `${randomY}px`;
         }
 
-        // 2. Fake Loading Logic
+        // 2. Step 2 Fake Loading Logic & Counter
         function fakeLoading(btn) {
+            step2NoClicks++; // Count No click attempt
             btn.disabled = true;
             btn.innerHTML = '<span class="spinner"></span> Processing...';
             
@@ -276,45 +316,25 @@
                     btn.disabled = false;
                     btn.className = "btn btn-yes";
                     btn.innerText = "Yes (Auto-converted)";
-                    btn.onclick = () => nextStep(3);
+                    btn.onclick = () => chooseYes(3);
                 }, 1800);
             }, 2000);
         }
 
-        // 3. Guilt-Trip Logic
+        // 3. Step 3 Guilt-Trip Logic & Counter
         const guiltStages = ["Are you sure?", "Really?", "Think of us!", "Click Yes instead"];
         let guiltIndex = 0;
         function guiltTrip(btn) {
+            step3NoClicks++; // Count No hover/click attempt
             btn.innerText = guiltStages[guiltIndex];
             guiltIndex++;
             
             if (guiltIndex > guiltStages.length) {
                 btn.className = "btn btn-yes";
                 btn.innerText = "ချစ်သေးတယ်";
-                btn.onclick = () => finishQuiz();
+                btn.onclick = () => chooseYes('final');
             }
         }
-
-        function finishQuiz() {
-            // Submit Formspree automatically when user finishes the quiz successfully
-            const form = document.getElementById('formspree-form');
-            const formData = new FormData(form);
-            
-            fetch(form.action, {
-                method: form.method,
-                body: formData,
-                headers: {
-                    'Accept': 'application/json'
-                }
-            }).catch(error => console.error('Error submitting to Formspree:', error));
-
-            // Show final success screen
-            document.getElementById(`step-${currentStep}`).classList.remove('active');
-            currentStep = 'final';
-            document.getElementById('step-final').classList.add('active');
-            document.getElementById('progress').style.display = 'none';
-        }
     </script>
-
 </body>
 </html>
